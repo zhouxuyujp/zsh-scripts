@@ -1,10 +1,7 @@
 #!/bin/zsh
 
-# Get the block IP file path from the parameter
-BLOCKED_IPS_FILE="$1"
-
-# Watch for changes to the block IP file (e.g., modified or closed after writing)
-while inotifywait -e modify,close_write "$BLOCKED_IPS_FILE"; do
-  echo "$BLOCKED_IPS_FILE modified: Applying new IP block rules"
-  "$HOME/update_iptables.zsh" "$BLOCKED_IPS_FILE"
+# 监听 blockip.txt 文件的更改（包括修改和关闭写操作）
+while inotifywait -e modify,close_write "$HOME/blockip.txt"; do
+  echo "blockip.txt modified: Applying new IP block rules"
+  "$HOME/update_iptables.sh"
 done
