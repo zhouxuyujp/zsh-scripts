@@ -74,3 +74,44 @@ menu() {
     echo ""  # New line for better readability
   done
 }
+
+
+
+replace() {
+    # Argument 1: Full file path
+    local file_path="$1"
+    
+    # Argument 2: Search string
+    local search="$2"
+    
+    # Argument 3: Replace string
+    local replace="$3"
+
+    # Check if file exists
+    if [[ ! -f "$file_path" ]]; then
+        echo "Error: File does not exist: $file_path"
+        return 1
+    fi
+
+    # Check if both search and replace strings are provided
+    if [[ -z "$search" || -z "$replace" ]]; then
+        echo "Error: Search string and replace string must be provided."
+        return 1
+    fi
+
+    # Attempt to run the sed replacement, use sudo if needed
+    if [[ -w "$file_path" ]]; then
+        # If the user has write permissions, replace without sudo
+        sed -i'' "s|$search|$replace|g" "$file_path"
+    else
+        # If the user lacks write permissions, try using sudo
+        sudo sed -i'' "s|$search|$replace|g" "$file_path"
+    fi
+
+    # Check if the replacement was successful
+    if [[ $? -eq 0 ]]; then
+        echo "Replaced '$search' with '$replace' in file '$file_path'."
+    else
+        echo "Error: Failed to replace strings in the file."
+    fi
+}
