@@ -4,7 +4,8 @@ module.exports = {
       name: 'reboot-server',
       script: '/home/ubuntu/reboot-server.zsh',
       cron_restart: '30 4 * * *',
-      autorestart: false
+      autorestart: false,
+      interpreter: '/bin/zsh'
     }
   ]
 }
